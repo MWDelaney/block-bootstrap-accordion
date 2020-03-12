@@ -4,7 +4,13 @@
  * @see https://developer.wordpress.org/block-editor/developers/block-api/#registering-a-block
  */
 import { registerBlockType } from '@wordpress/blocks';
-import { InnerBlocks } from '@wordpress/block-editor';
+import { InnerBlocks, InspectorControls  } from '@wordpress/block-editor';
+import {
+  PanelBody,
+  ToggleControl
+} from "@wordpress/components";
+
+const { select, dispatch } = wp.data;
 
 /**
  * Retrieves the translation of text.
@@ -56,6 +62,10 @@ registerBlockType( 'create-block/accordion-item', {
   attributes: {
     parentId: {
       type: "string"
+    },
+    show: {
+      type: "boolean",
+      default: 0
     }
   },
 
@@ -73,13 +83,38 @@ registerBlockType( 'create-block/accordion-item', {
 	 */
 	edit( props ) {
 
+    const { clientId, attributes, setAttributes } = props;
+
     const TEMPLATE = [
       [ 'create-block/accordion-heading', { itemId: props.clientId } ],
-      [ 'create-block/accordion-collapse', { parentId: props.attributes.parentId, itemId: props.clientId } ]
+      [ 'create-block/accordion-collapse', {
+          parentId: props.attributes.parentId,
+          itemId: props.clientId,
+      } ]
     ];
+
 
 		return (
       <div className="card">
+        <InspectorControls>
+          <PanelBody title="Parallax Configuration" icon="" initialOpen={true}>
+            <ToggleControl
+              label="Initially open"
+              help={
+                attributes.show
+                  ? "Item will be open when the page loads."
+                  : "Image will be closed when the page loads."
+              }
+              checked={attributes.show}
+              onChange={value => {
+                setAttributes({ show: value });
+                select('core/editor').getBlocksByClientId(clientId)[0].innerBlocks.forEach(function (block) {
+                  dispatch('core/editor').updateBlockAttributes(block.clientId, { show: value })
+                })
+              }}
+            />
+          </PanelBody>
+        </InspectorControls>
         <InnerBlocks
           template={ TEMPLATE }
           templateLock='all'

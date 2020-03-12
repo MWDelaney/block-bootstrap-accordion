@@ -59,6 +59,9 @@ registerBlockType( 'create-block/accordion-collapse', {
     },
     itemId: {
       type: "string"
+    },
+    show: {
+      type: "boolean"
     }
   },
 
@@ -74,15 +77,13 @@ registerBlockType( 'create-block/accordion-collapse', {
 	 *
 	 * @return {WPElement} Element to render.
 	 */
-	edit() {
+	edit(props) {
 		return (
-      <div>
         <div className="card-body">
-        <InnerBlocks
-          templateLock={ false }
-        />
+          <InnerBlocks
+            templateLock={ false }
+          />
         </div>
-      </div>
 		);
 	},
 
@@ -96,7 +97,7 @@ registerBlockType( 'create-block/accordion-collapse', {
 	 */
 	save( props ) {
 		return (
-      <div id={ "collapse-" + props.attributes.itemId } className="collapse" aria-labelledby={ "heading-" + props.attributes.itemId } data-parent={ "#accordion-" + props.attributes.parentId }>
+      <div id={ "collapse-" + props.attributes.itemId } className={(props.attributes.show) ? "collapse show" : "collapse" } aria-labelledby={ "heading-" + props.attributes.itemId } data-parent={ "#accordion-" + props.attributes.parentId }>
         <div className="card-body">
           <InnerBlocks.Content />
         </div>

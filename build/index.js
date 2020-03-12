@@ -163,6 +163,9 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('cre
     },
     itemId: {
       type: "string"
+    },
+    show: {
+      type: "boolean"
     }
   },
   parent: ['create-block/accordion-item'],
@@ -177,12 +180,12 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('cre
    *
    * @return {WPElement} Element to render.
    */
-  edit: function edit() {
-    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+  edit: function edit(props) {
+    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       className: "card-body"
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["InnerBlocks"], {
       templateLock: false
-    })));
+    }));
   },
 
   /**
@@ -196,7 +199,7 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('cre
   save: function save(props) {
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       id: "collapse-" + props.attributes.itemId,
-      className: "collapse",
+      className: props.attributes.show ? "collapse show" : "collapse",
       "aria-labelledby": "heading-" + props.attributes.itemId,
       "data-parent": "#accordion-" + props.attributes.parentId
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
@@ -349,8 +352,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__);
 
 
 /**
@@ -360,6 +365,10 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 
+
+var _wp$data = wp.data,
+    select = _wp$data.select,
+    dispatch = _wp$data.dispatch;
 /**
  * Retrieves the translation of text.
  *
@@ -378,13 +387,13 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('cre
    * This is the display title for your block, which can be translated with `i18n` functions.
    * The block inserter will show this name.
    */
-  title: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__["__"])('Accordion Item', 'create-block'),
+  title: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__["__"])('Accordion Item', 'create-block'),
 
   /**
    * This is a short description for your block, can be translated with `i18n` functions.
    * It will be shown in the Block Tab in the Settings Sidebar.
    */
-  description: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__["__"])('Individual accordion item.', 'create-block'),
+  description: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__["__"])('Individual accordion item.', 'create-block'),
 
   /**
    * Blocks are grouped into categories to help users browse and discover them.
@@ -408,6 +417,10 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('cre
   attributes: {
     parentId: {
       type: "string"
+    },
+    show: {
+      type: "boolean",
+      default: 0
     }
   },
   parent: ['create-block/accordion'],
@@ -423,6 +436,9 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('cre
    * @return {WPElement} Element to render.
    */
   edit: function edit(props) {
+    var clientId = props.clientId,
+        attributes = props.attributes,
+        setAttributes = props.setAttributes;
     var TEMPLATE = [['create-block/accordion-heading', {
       itemId: props.clientId
     }], ['create-block/accordion-collapse', {
@@ -431,7 +447,25 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('cre
     }]];
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       className: "card"
-    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["InnerBlocks"], {
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["InspectorControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["PanelBody"], {
+      title: "Parallax Configuration",
+      icon: "",
+      initialOpen: true
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["ToggleControl"], {
+      label: "Initially open",
+      help: attributes.show ? "Item will be open when the page loads." : "Image will be closed when the page loads.",
+      checked: attributes.show,
+      onChange: function onChange(value) {
+        setAttributes({
+          show: value
+        });
+        select('core/editor').getBlocksByClientId(clientId)[0].innerBlocks.forEach(function (block) {
+          dispatch('core/editor').updateBlockAttributes(block.clientId, {
+            show: value
+          });
+        });
+      }
+    }))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["InnerBlocks"], {
       template: TEMPLATE,
       templateLock: "all"
     }));
@@ -620,6 +654,17 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports) {
 
 (function() { module.exports = this["wp"]["blocks"]; }());
+
+/***/ }),
+
+/***/ "@wordpress/components":
+/*!*********************************************!*\
+  !*** external {"this":["wp","components"]} ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+(function() { module.exports = this["wp"]["components"]; }());
 
 /***/ }),
 
