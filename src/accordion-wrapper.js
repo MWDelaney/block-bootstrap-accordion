@@ -3,8 +3,8 @@
  *
  * @see https://developer.wordpress.org/block-editor/developers/block-api/#registering-a-block
  */
-import { registerBlockType } from '@wordpress/blocks';
-import { InnerBlocks } from '@wordpress/block-editor';
+import { registerBlockType } from "@wordpress/blocks";
+import { InnerBlocks } from "@wordpress/block-editor";
 const { select, dispatch } = wp.data;
 
 /**
@@ -12,7 +12,7 @@ const { select, dispatch } = wp.data;
  *
  * @see https://developer.wordpress.org/block-editor/packages/packages-i18n/
  */
-import { __ } from '@wordpress/i18n';
+import { __ } from "@wordpress/i18n";
 
 /**
  * Every block starts by registering a new block type definition.
@@ -20,47 +20,47 @@ import { __ } from '@wordpress/i18n';
  * @see https://developer.wordpress.org/block-editor/developers/block-api/#registering-a-block
  */
 
-registerBlockType( 'create-block/accordion', {
+registerBlockType("create-block/accordion", {
 	/**
 	 * This is the display title for your block, which can be translated with `i18n` functions.
 	 * The block inserter will show this name.
 	 */
-	title: __( 'Accordion', 'create-block' ),
+	title: __("Accordion", "create-block"),
 
 	/**
 	 * This is a short description for your block, can be translated with `i18n` functions.
 	 * It will be shown in the Block Tab in the Settings Sidebar.
 	 */
 	description: __(
-    'Group of collapsible "accordion" type items.',
-		'create-block'
+		'Group of collapsible "accordion" type items.',
+		"create-block"
 	),
 
 	/**
 	 * Blocks are grouped into categories to help users browse and discover them.
 	 * The categories provided by core are `common`, `embed`, `formatting`, `layout` and `widgets`.
 	 */
-	category: 'widgets',
+	category: "widgets",
 
 	/**
 	 * An icon property should be specified to make it easier to identify a block.
 	 * These can be any of WordPress’ Dashicons, or a custom svg element.
 	 */
-	icon: 'menu',
+	icon: "menu",
 
 	/**
 	 * Optional block extended support features.
 	 */
 	supports: {
 		// Removes support for an HTML mode.
-		html: false,
-  },
+		html: false
+	},
 
-  attributes: {
-    parentId: {
-      type: "string"
-    }
-  },
+	attributes: {
+		parentId: {
+			type: "string"
+		}
+	},
 
 	/**
 	 * The edit function describes the structure of your block in the context of the editor.
@@ -72,23 +72,23 @@ registerBlockType( 'create-block/accordion', {
 	 *
 	 * @return {WPElement} Element to render.
 	 */
-	edit( props ) {
-    const ALLOWED_BLOCKS = [ 'create-block/accordion-item' ];
-    const { clientId, setAttributes } = props
+	edit(props) {
+		const ALLOWED_BLOCKS = ["create-block/accordion-item"];
+		const { clientId, setAttributes } = props;
 
-    setAttributes({ parentId: props.clientId })
+		setAttributes({ parentId: props.clientId });
 
-    select('core/editor').getBlocksByClientId(clientId)[0].innerBlocks.forEach(function (block) {
-      dispatch('core/editor').updateBlockAttributes(block.clientId, { parentId: clientId })
-    })
-
-
+		select("core/editor")
+			.getBlocksByClientId(clientId)[0]
+			.innerBlocks.forEach(function(block) {
+				dispatch("core/editor").updateBlockAttributes(block.clientId, {
+					parentId: clientId
+				});
+			});
 
 		return (
 			<div className="accordion">
-        <InnerBlocks
-          allowedBlocks={ ALLOWED_BLOCKS }
-        />
+				<InnerBlocks allowedBlocks={ALLOWED_BLOCKS} />
 			</div>
 		);
 	},
@@ -101,12 +101,11 @@ registerBlockType( 'create-block/accordion', {
 	 *
 	 * @return {WPElement} Element to render.
 	 */
-	save( props ) {
-
-    return (
-			<div className="accordion" id={ "accordion-" + props.attributes.parentId }>
-        <InnerBlocks.Content />
+	save(props) {
+		return (
+			<div className="accordion" id={"accordion-" + props.attributes.parentId}>
+				<InnerBlocks.Content />
 			</div>
 		);
-	},
-} );
+	}
+});

@@ -3,12 +3,9 @@
  *
  * @see https://developer.wordpress.org/block-editor/developers/block-api/#registering-a-block
  */
-import { registerBlockType } from '@wordpress/blocks';
-import { InnerBlocks, InspectorControls  } from '@wordpress/block-editor';
-import {
-  PanelBody,
-  ToggleControl
-} from "@wordpress/components";
+import { registerBlockType } from "@wordpress/blocks";
+import { InnerBlocks, InspectorControls } from "@wordpress/block-editor";
+import { PanelBody, ToggleControl } from "@wordpress/components";
 
 const { select, dispatch } = wp.data;
 
@@ -17,59 +14,56 @@ const { select, dispatch } = wp.data;
  *
  * @see https://developer.wordpress.org/block-editor/packages/packages-i18n/
  */
-import { __ } from '@wordpress/i18n';
+import { __ } from "@wordpress/i18n";
 
 /**
  * Every block starts by registering a new block type definition.
  *
  * @see https://developer.wordpress.org/block-editor/developers/block-api/#registering-a-block
  */
-registerBlockType( 'create-block/accordion-item', {
+registerBlockType("create-block/accordion-item", {
 	/**
 	 * This is the display title for your block, which can be translated with `i18n` functions.
 	 * The block inserter will show this name.
 	 */
-	title: __( 'Accordion Item', 'create-block' ),
+	title: __("Accordion Item", "create-block"),
 
 	/**
 	 * This is a short description for your block, can be translated with `i18n` functions.
 	 * It will be shown in the Block Tab in the Settings Sidebar.
 	 */
-	description: __(
-		'Individual accordion item.',
-		'create-block'
-	),
+	description: __("Individual accordion item.", "create-block"),
 
 	/**
 	 * Blocks are grouped into categories to help users browse and discover them.
 	 * The categories provided by core are `common`, `embed`, `formatting`, `layout` and `widgets`.
 	 */
-	category: 'common',
+	category: "common",
 
 	/**
 	 * An icon property should be specified to make it easier to identify a block.
 	 * These can be any of WordPress’ Dashicons, or a custom svg element.
 	 */
-	icon: 'minus',
+	icon: "minus",
 
 	/**
 	 * Optional block extended support features.
 	 */
 	supports: {
 		// Removes support for an HTML mode.
-		html: false,
-  },
-  attributes: {
-    parentId: {
-      type: "string"
-    },
-    show: {
-      type: "boolean",
-      default: 0
-    }
-  },
+		html: false
+	},
+	attributes: {
+		parentId: {
+			type: "string"
+		},
+		show: {
+			type: "boolean",
+			default: 0
+		}
+	},
 
-  parent: ['create-block/accordion'],
+	parent: ["create-block/accordion"],
 
 	/**
 	 * The edit function describes the structure of your block in the context of the editor.
@@ -81,45 +75,47 @@ registerBlockType( 'create-block/accordion-item', {
 	 *
 	 * @return {WPElement} Element to render.
 	 */
-	edit( props ) {
+	edit(props) {
+		const { clientId, attributes, setAttributes } = props;
 
-    const { clientId, attributes, setAttributes } = props;
-
-    const TEMPLATE = [
-      [ 'create-block/accordion-heading', { itemId: props.clientId } ],
-      [ 'create-block/accordion-collapse', {
-          parentId: props.attributes.parentId,
-          itemId: props.clientId,
-      } ]
-    ];
-
+		const TEMPLATE = [
+			["create-block/accordion-heading", { itemId: props.clientId }],
+			[
+				"create-block/accordion-collapse",
+				{
+					parentId: props.attributes.parentId,
+					itemId: props.clientId
+				}
+			]
+		];
 
 		return (
-      <div className="card">
-        <InspectorControls>
-          <PanelBody title="Collapse Configuration" icon="" initialOpen={true}>
-            <ToggleControl
-              label="Initially open"
-              help={
-                attributes.show
-                  ? "Item will be open when the page loads."
-                  : "Image will be closed when the page loads."
-              }
-              checked={attributes.show}
-              onChange={value => {
-                setAttributes({ show: value });
-                select('core/editor').getBlocksByClientId(clientId)[0].innerBlocks.forEach(function (block) {
-                  dispatch('core/editor').updateBlockAttributes(block.clientId, { show: value })
-                })
-              }}
-            />
-          </PanelBody>
-        </InspectorControls>
-        <InnerBlocks
-          template={ TEMPLATE }
-          templateLock='all'
-        />
-      </div>
+			<div className="card">
+				<InspectorControls>
+					<PanelBody title="Collapse Configuration" icon="" initialOpen={true}>
+						<ToggleControl
+							label="Initially open"
+							help={
+								attributes.show
+									? "Item will be open when the page loads."
+									: "Image will be closed when the page loads."
+							}
+							checked={attributes.show}
+							onChange={value => {
+								setAttributes({ show: value });
+								select("core/editor")
+									.getBlocksByClientId(clientId)[0]
+									.innerBlocks.forEach(function(block) {
+										dispatch(
+											"core/editor"
+										).updateBlockAttributes(block.clientId, { show: value });
+									});
+							}}
+						/>
+					</PanelBody>
+				</InspectorControls>
+				<InnerBlocks template={TEMPLATE} templateLock="all" />
+			</div>
 		);
 	},
 
@@ -133,9 +129,9 @@ registerBlockType( 'create-block/accordion-item', {
 	 */
 	save() {
 		return (
-      <div className="card">
-			  <InnerBlocks.Content />
-      </div>
+			<div className="card">
+				<InnerBlocks.Content />
+			</div>
 		);
-	},
-} );
+	}
+});
