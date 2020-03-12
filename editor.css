@@ -1,0 +1,18 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+ [data-type="create-block/accordion-collapse"] {
+   display: none;
+ }
+
+[data-type="create-block/accordion-item"].has-child-selected [data-type="create-block/accordion-collapse"],
+[data-type="create-block/accordion-item"].is-selected [data-type="create-block/accordion-collapse"] {
+  display: block;
+}
+
+[data-type="create-block/accordion-item"] .card {
+  width: 100%;
+  max-width: none;
+}
