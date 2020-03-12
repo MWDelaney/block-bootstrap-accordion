@@ -97,7 +97,7 @@ registerBlockType( 'create-block/accordion-item', {
 		return (
       <div className="card">
         <InspectorControls>
-          <PanelBody title="Parallax Configuration" icon="" initialOpen={true}>
+          <PanelBody title="Collapse Configuration" icon="" initialOpen={true}>
             <ToggleControl
               label="Initially open"
               help={

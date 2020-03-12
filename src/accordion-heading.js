@@ -57,6 +57,9 @@ registerBlockType( 'create-block/accordion-heading', {
     itemId: {
       type: "string"
     },
+    show: {
+      type: "boolean"
+    },
   },
 
   parent: ['create-block/accordion-item'],
@@ -98,7 +101,7 @@ registerBlockType( 'create-block/accordion-heading', {
 	save( { attributes } ) {
     return (
       <div className="card-header" id={ "heading-" + attributes.itemId }>
-        <button class="btn btn-link" type="button" data-toggle="collapse" data-target={"#collapse-" + attributes.itemId } aria-expanded="false" aria-controls={"collapse-" + attributes.itemId }>
+        <button class="btn btn-link" type="button" data-toggle="collapse" data-target={"#collapse-" + attributes.itemId } aria-expanded={ (attributes.show) ? "true" : "false" } aria-controls={"collapse-" + attributes.itemId }>
           <InnerBlocks.Content />
         </button>
       </div>

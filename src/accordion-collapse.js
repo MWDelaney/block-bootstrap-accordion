@@ -77,7 +77,7 @@ registerBlockType( 'create-block/accordion-collapse', {
 	 *
 	 * @return {WPElement} Element to render.
 	 */
-	edit(props) {
+	edit() {
 		return (
         <div className="card-body">
           <InnerBlocks
