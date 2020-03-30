@@ -79,12 +79,12 @@ registerBlockType("create-block/accordion", {
 		setAttributes({ parentId: props.clientId });
 
 		select("core/editor")
-			.getBlocksByClientId(clientId)[0]
-			.innerBlocks.forEach(function(block) {
-				dispatch("core/editor").updateBlockAttributes(block.clientId, {
-					parentId: clientId
-				});
-			});
+		.getBlocksByClientId(props.clientId)[0]
+		.innerBlocks.forEach(function(block) {
+		  dispatch("core/editor").updateBlockAttributes(block.clientId, {
+		    parentId: props.clientId
+		  });
+		});
 
 		return (
 			<div className="accordion">
